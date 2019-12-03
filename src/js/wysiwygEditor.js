@@ -320,7 +320,7 @@ class WysiwygEditor {
         const range = this.getRange();
 
         if (domUtils.isTextNode(range.commonAncestorContainer)
-                    && domUtils.isTextNode(range.commonAncestorContainer.previousSibling)) {
+          && domUtils.isTextNode(range.commonAncestorContainer.previousSibling)) {
           const prevLen = range.commonAncestorContainer.previousSibling.length;
           const curEl = range.commonAncestorContainer;
 
@@ -558,6 +558,7 @@ class WysiwygEditor {
     if (!collapsed && commonAncestorContainer === root) {
       if (startContainer === root) {
         return FIND_TABLE_AND_HEADING_RX.test(domUtils.getChildNodeByOffset(startContainer, startOffset).nodeName);
+      // eslint-disable-next-line no-else-return
       } else if (startOffset === 0) {
         return FIND_TABLE_AND_HEADING_RX.test(domUtils.getParentUntil(startContainer, root).nodeName);
       }
@@ -587,7 +588,7 @@ class WysiwygEditor {
    */
   _isInOrphanText(range) {
     return range.startContainer.nodeType === Node.TEXT_NODE
-            && range.startContainer.parentNode === this.get$Body()[0];
+      && range.startContainer.parentNode === this.get$Body()[0];
   }
 
   /**
@@ -897,6 +898,8 @@ class WysiwygEditor {
     // remove unnecessary brs
     html = html.replace(FIND_UNNECESSARY_BR, '</$1>');
 
+    html = this.eventManager.emitReduce('convertorBeforeHtmlToMarkdownConverted', html);
+
     // remove contenteditable block, in this case div
     html = html.replace(/<div[^>]*>/g, '');
     html = html.replace(/<\/div>/g, '<br />');
@@ -1030,7 +1033,7 @@ class WysiwygEditor {
   breakToNewDefaultBlock(range, where) {
     const div = this.editor.createDefaultBlock();
     const currentNode = domUtils.getChildNodeByOffset(range.startContainer, range.startOffset)
-            || domUtils.getChildNodeByOffset(range.startContainer, range.startOffset - 1);
+      || domUtils.getChildNodeByOffset(range.startContainer, range.startOffset - 1);
     const appendBefore = domUtils.getParentUntil(currentNode, this.get$Body()[0]);
 
     if (where === 'before') {
@@ -1254,7 +1257,7 @@ class WysiwygEditor {
 
   _isCursorNotInRestrictedAreaOfTabAction(editor) {
     return !editor.hasFormat('li')
-            && !editor.hasFormat('blockquote') && !editor.hasFormat('table');
+      && !editor.hasFormat('blockquote') && !editor.hasFormat('table');
   }
 
   /**

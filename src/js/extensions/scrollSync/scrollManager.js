@@ -96,7 +96,9 @@ class ScrollManager {
    * @private
    */
   _getScrollFactorsOfEditor() {
-    const {cm} = this;
+    const {
+      cm
+    } = this;
     let scrollInfo = cm.getScrollInfo();
     let topLine, topSection, ratio, factors;
 
@@ -117,6 +119,12 @@ class ScrollManager {
       }, 'local').line;
 
       topSection = this.sectionManager.sectionByLine(topLine);
+      if (!topSection) {
+        return {
+          section: topSection,
+          sectionRatio: 0
+        };
+      }
 
       ratio = this._getEditorSectionScrollRatio(topSection, topLine);
 
@@ -141,7 +149,7 @@ class ScrollManager {
     util.forEachArray(sectionList, section => {
       const $div = section.$previewSectionEl;
       const $preview = $div.parent().parent();
-      const isPreviewBottom = ($preview[0].clientHeight - $preview.scrollTop()) <= $preview[0].height;
+      const isPreviewBottom = Math.ceil($preview[0].scrollHeight - $preview[0].scrollTop) === $preview[0].clientHeight;
       let needNext = true;
 
       if (isPreviewBottom) {
@@ -184,10 +192,20 @@ class ScrollManager {
     let scrollTop;
 
     const scrollFactors = this._getScrollFactorsOfEditor();
-    const {section, sectionRatio} = scrollFactors;
+
+    if (!scrollFactors) {
+      return -1;
+    }
+
+    const {
+      section,
+      sectionRatio
+    } = scrollFactors;
 
     if (scrollFactors.isEditorBottom) {
       scrollTop = this.$contents.height();
+    } else if (!section) {
+      return -1;
     } else if (section.$previewSectionEl) {
       scrollTop = section.$previewSectionEl[0].offsetTop;
       scrollTop += (section.$previewSectionEl.height() * sectionRatio) - SCROLL_TOP_PADDING;
@@ -206,12 +224,18 @@ class ScrollManager {
   _getScrollTopForMarkdown() {
     let scrollTop;
     const scrollFactors = this._getScrollInfoForMarkdown();
+    if (!scrollFactors) {
+      return -1;
+    }
+
     const ratio = scrollFactors.sectionRatio;
 
     if (scrollFactors.isPreviewBottom) {
       scrollTop = this.cm.getScrollInfo().height;
     } else if (scrollFactors.section) {
-      const {section} = scrollFactors;
+      const {
+        section
+      } = scrollFactors;
       const coordsAtStart = this.cm.charCoords({
         line: section.start,
         char: 0
@@ -235,9 +259,15 @@ class ScrollManager {
    * sync preview scroll to markdown
    */
   syncPreviewScrollTopToMarkdown() {
-    const {$previewContainerEl} = this;
+    const {
+      $previewContainerEl
+    } = this;
     const sourceScrollTop = $previewContainerEl.scrollTop();
     const targetScrollTop = this._getScrollTopForPreview();
+
+    if (targetScrollTop === -1) {
+      return;
+    }
 
     this.isPreviewScrollEventBlocked = true;
 
@@ -261,6 +291,9 @@ class ScrollManager {
     const codeMirrorScrollInfo = codeMirror.getScrollInfo();
     const sourceScrollTop = codeMirrorScrollInfo.top;
     const targetScrollTop = this._getScrollTopForMarkdown();
+    if (targetScrollTop === -1) {
+      return;
+    }
 
     this.isMarkdownScrollEventBlocked = true;
 

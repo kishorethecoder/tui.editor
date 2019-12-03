@@ -87,7 +87,7 @@ class Convertor {
    */
   _markdownToHtmlWithCodeHighlight(markdown, env) {
     // eslint-disable-next-line
-        const onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
+    const onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
     while (onerrorStripeRegex.exec(markdown)) {
       markdown = markdown.replace(onerrorStripeRegex, '$1$3');
     }
@@ -105,9 +105,10 @@ class Convertor {
    * @returns {string} html text
    */
   _markdownToHtml(markdown, env) {
+    markdown = markdown.replace(/<br>\n/g, '<br>');
     markdown = markdown.replace(/<br>/ig, '<br data-tomark-pass>');
     // eslint-disable-next-line
-        const onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
+    const onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
     while (onerrorStripeRegex.exec(markdown)) {
       markdown = markdown.replace(onerrorStripeRegex, '$1$3');
     }

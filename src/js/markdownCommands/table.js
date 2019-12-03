@@ -60,7 +60,7 @@ function makeHeader(col, data) {
       header += ` ${data[index]} |`;
       index += 1;
     } else {
-      header += '  |';
+      header += ' header |';
     }
 
     border += ' --- |';
@@ -91,7 +91,7 @@ function makeBody(col, row, data) {
         body += ` ${data[index]} |`;
         index += 1;
       } else {
-        body += '  |';
+        body += ' cell |';
       }
     }
 

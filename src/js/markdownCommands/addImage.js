@@ -37,12 +37,26 @@ const AddImage = CommandManager.command('markdown', /** @lends AddImage */ {
       ch: range.to.ch
     };
 
-    let {altText, imageUrl} = data;
+    let altText = data.altText;
+    let imageUrl = data.videoUrl || data.imageUrl;
     altText = decodeURIGraceful(altText);
     altText = escapeMarkdownCharacters(altText);
     imageUrl = encodeMarkdownCharacters(imageUrl);
-    const replaceText = `![${altText}](${imageUrl})`;
 
+    let replaceText = '';
+    if (data.videoUrl) {
+      replaceText = `![${altText}](${imageUrl}){height="480" width="640"}`;
+    } else {
+      replaceText = `![${altText}](${imageUrl}){height="" width=""}`;
+    }
+
+    if (from.ch > 0) {
+      replaceText = `\n\n${replaceText}`;
+    }
+    const isNextLineEmpty = (cm.getLine(to.line + 1) || '').trim().length === 0;
+    if (!isNextLineEmpty) {
+      replaceText += '\n\n';
+    }
     doc.replaceRange(replaceText, from, to, '+addImage');
 
     cm.focus();

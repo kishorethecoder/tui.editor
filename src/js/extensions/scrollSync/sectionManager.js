@@ -149,8 +149,8 @@ class SectionManager {
         isEnsuredSection = false;
         // setext header
       } else if (!this._isCodeBlockEnd(lineString)
-                && !onTable
-                && this._isSeTextHeader(lineString, nextLineString)
+        && !onTable
+        && this._isSeTextHeader(lineString, nextLineString)
       ) {
         isRightAfterImageSection = false;
         isSection = true;
@@ -190,8 +190,8 @@ class SectionManager {
    */
   _isIndependentImage(onCodeBlock, onTable, lineString, prevLineString) {
     return !onCodeBlock && !onTable
-            && this._isImage(lineString) && !this._isList(lineString) && !this._isQuote(lineString)
-            && prevLineString.length === 0;
+      && this._isImage(lineString) && !this._isList(lineString) && !this._isQuote(lineString)
+      && prevLineString.length === 0;
   }
 
   /**
@@ -368,17 +368,22 @@ class SectionManager {
     this.$previewContent.contents().filter(findElementNodeFilter).each((index, el) => {
       const isParagraph = (el.tagName === 'P');
       const isHeading = el.tagName.match(/^(H1|H2|H3|H4|H5|H6)$/);
-      const isImage = (isParagraph && el.childNodes[0].nodeName === 'IMG');
+      const nonEmptyChild = el.firstElementChild !== null;
+      const IsImage = nonEmptyChild && el.firstElementChild.tagName === 'IMG';
+      const IsIframe = nonEmptyChild && el.firstElementChild.tagName === 'IFRAME';
+      const IsVideo = nonEmptyChild && el.firstElementChild.tagName === 'VIDEO';
+      const IsObjectTag = nonEmptyChild && el.firstElementChild.tagName === 'OBJECT';
+      const isContainerElement = isParagraph && (IsImage || IsIframe || IsVideo || IsObjectTag);
 
-      if ((isHeading || isImage || isRightAfterImageSection)
-                && sections[lastSection].length
+      if ((isHeading || isContainerElement || isRightAfterImageSection) &&
+        sections[lastSection].length
       ) {
         sections.push([]);
         lastSection += 1;
         isRightAfterImageSection = false;
       }
 
-      if (isImage) {
+      if (isContainerElement) {
         isRightAfterImageSection = true;
       }
 

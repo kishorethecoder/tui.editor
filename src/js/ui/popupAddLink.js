@@ -1,14 +1,11 @@
 /**
  * @fileoverview Implements PopupAddLink
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
-import $ from 'jquery';
 import util from 'tui-code-snippet';
-
+import $ from 'jquery';
 import LayerPopup from './layerpopup';
 import i18n from '../i18n';
-
-const URL_REGEX = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/([^\s]*))?$/;
 
 /**
  * Class PopupAddLink
@@ -27,7 +24,11 @@ class PopupAddLink extends LayerPopup {
             <input type="text" class="te-link-text-input" />
             <label for="url">${i18n.get('URL')}</label>
             <input type="text" class="te-url-input" />
-            <div class="te-button-section">
+            <div class="custom-control ml-1 custom-checkbox custom-control-inline">
+              <input type="checkbox" id="chknewWindow"  class="custom-control-input">
+              <label class="mt-1 custom-control-label" for="chknewWindow">Open in new tab</label>
+            </div>
+            <div class="float-right mb-2 d-inline te-link te-button-section">
                 <button type="button" class="te-ok-button">${i18n.get('OK')}</button>
                 <button type="button" class="te-close-button">${i18n.get('Cancel')}</button>
             </div>
@@ -68,6 +69,8 @@ class PopupAddLink extends LayerPopup {
     const el = this.$el.get(0);
     this._inputText = el.querySelector('.te-link-text-input');
     this._inputURL = el.querySelector('.te-url-input');
+    this._chknewWindow = el.querySelector('#chknewWindow');
+    this._okBtn = el.querySelector('.te-link .te-ok-button');
   }
 
   /**
@@ -78,20 +81,18 @@ class PopupAddLink extends LayerPopup {
    */
   _initDOMEvent() {
     super._initDOMEvent();
-
+    this.on('keyup .te-url-input', () => this.disableBtnOnEmptyValue());
+    this.on('paste .te-url-input', () => this.disableBtnOnEmptyValue());
     this.on('click .te-close-button', () => this.hide());
     this.on('click .te-ok-button', () => this._addLink());
-
     this.on('shown', () => {
       const inputText = this._inputText;
       const inputURL = this._inputURL;
+      this._okBtn.disabled = true;
 
       const selectedText = this._editor.getSelectedText().trim();
 
       inputText.value = selectedText;
-      if (URL_REGEX.exec(selectedText)) {
-        inputURL.value = selectedText;
-      }
 
       if (selectedText.length > 0 && inputURL.value.length < 1) {
         inputURL.focus();
@@ -99,6 +100,7 @@ class PopupAddLink extends LayerPopup {
         inputText.focus();
         inputText.setSelectionRange(0, selectedText.length);
       }
+      this.disableBtnOnEmptyValue();
     });
 
     this.on('hidden', () => {
@@ -125,7 +127,11 @@ class PopupAddLink extends LayerPopup {
   }
 
   _addLink() {
-    const {url, linkText} = this._getValue();
+    const {
+      url,
+      linkText,
+      openinNewWindow
+    } = this._getValue();
 
     this._clearValidationStyle();
 
@@ -134,15 +140,11 @@ class PopupAddLink extends LayerPopup {
 
       return;
     }
-    if (url.length < 1) {
-      $(this._inputURL).addClass('wrong');
-
-      return;
-    }
 
     this._eventManager.emit('command', 'AddLink', {
       linkText,
-      url
+      url,
+      openinNewWindow
     });
     this.hide();
   }
@@ -150,10 +152,12 @@ class PopupAddLink extends LayerPopup {
   _getValue() {
     const url = this._inputURL.value;
     const linkText = this._inputText.value;
+    const openinNewWindow = this._chknewWindow.checked;
 
     return {
       url,
-      linkText
+      linkText,
+      openinNewWindow
     };
   }
 
@@ -162,9 +166,15 @@ class PopupAddLink extends LayerPopup {
     $(this._inputText).removeClass('wrong');
   }
 
+  disableBtnOnEmptyValue() {
+    const inputURL = this._inputURL.value.trim();
+    this._okBtn.disabled = inputURL.length === 0;
+  }
+
   _resetInputs() {
     this._inputText.value = '';
     this._inputURL.value = '';
+    this._chknewWindow.checked = false;
     this._clearValidationStyle();
   }
 }

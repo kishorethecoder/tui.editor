@@ -114,7 +114,7 @@ class ToolbarItemFactory {
         name: 'image',
         className: 'tui-image',
         event: 'openPopupAddImage',
-        tooltip: i18n.get('Insert image'),
+        tooltip: 'Insert Image From Url',
         state: ''
       });
       break;
@@ -138,7 +138,7 @@ class ToolbarItemFactory {
     case 'codeblock':
       toolbarItem = new ToolbarButton({
         name: 'codeblock',
-        className: 'tui-codeblock',
+        className: 'tui-code',
         command: 'CodeBlock',
         tooltip: i18n.get('Insert CodeBlock'),
         state: 'codeBlock'

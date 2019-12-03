@@ -23,7 +23,7 @@ i18n.setLanguage(['en', 'en_US'], {
   'Indent': 'Indent',
   'Outdent': 'Outdent',
   'Insert link': 'Insert link',
-  'Insert CodeBlock': 'Insert codeBlock',
+  'Insert CodeBlock': 'Insert codeblock',
   'Insert table': 'Insert table',
   'Insert image': 'Insert image',
   'Heading': 'Heading',

@@ -20,19 +20,11 @@ class Button extends ToolbarItem {
   static name = 'button';
 
   /**
-   * ToolbarItem className
-   * @type {String}
-   * @memberof Button
-   * @static
-   */
-  static className = 'tui-toolbar-icons';
-
-  /**
    * Creates an instance of Button.
    * @param {object} options - button options
-   *  @param {jquery} $el - button rootElement
    *  @param {string} options.className - button class name
    *  @param {string} options.command - command name to execute on click
+   *  @param {Array<string>} options.params - params for the command
    *  @param {string} options.event - event name to trigger on click
    *  @param {string} options.text - text on button
    *  @param {string} options.tooltip - text on tooltip
@@ -47,7 +39,7 @@ class Button extends ToolbarItem {
     super({
       name: options.name,
       tagName: 'button',
-      className: `${options.className} ${Button.className}`,
+      className: `${options.className}`,
       rootElement: options.$el
     });
 
@@ -64,7 +56,7 @@ class Button extends ToolbarItem {
   /**
    * set tooltip text
    * @param {string} text - tooltip text to show
-   * @memberof Button
+   * @memberof button
    */
   setTooltip(text) {
     this._tooltip = text;
@@ -75,6 +67,7 @@ class Button extends ToolbarItem {
     this._event = options.event;
     this._text = options.text;
     this._tooltip = options.tooltip;
+    this._params = options.params;
     this._style = options.style;
     this._state = options.state;
   }
@@ -94,7 +87,11 @@ class Button extends ToolbarItem {
     }
 
     if (this._command) {
-      this.trigger('command', this._command);
+      if (this._params) {
+        this.trigger('command', [this._command, this._params]);
+      } else {
+        this.trigger('command', this._command);
+      }
     } else if (this._event) {
       this.trigger('event', this._event);
     }

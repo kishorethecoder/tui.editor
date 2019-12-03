@@ -10,7 +10,7 @@ const HTML_ATTR_LIST_RX = new RegExp('^(abbr|align|alt|axis|bgcolor|border|cellp
     'ismap|lang|language|nohref|nowrap|rel|rev|rows|rules|' +
     'scope|scrolling|shape|size|span|start|summary|tabindex|target|title|type|' +
     'valign|value|vspace|width|checked|mathvariant|encoding|id|name|' +
-    'background|cite|href|longdesc|src|usemap|xlink:href|data-+|checked|style)', 'g');
+    'background|cite|href|longdesc|src|usemap|xlink:href|data-+|checked|style|.*allowfullscreen|frameborder|controls|poster)', 'g');
 
 const SVG_ATTR_LIST_RX = new RegExp('^(accent-height|accumulate|additive|alphabetic|arabic-form|ascent|' +
     'baseProfile|bbox|begin|by|calcMode|cap-height|class|color|color-rendering|content|' +
@@ -54,7 +54,7 @@ function htmlSanitizer(html, needHtmlText) {
  * @param {jQuery} $html jQuery instance
  */
 function removeUnnecessaryTags($html) {
-  $html.find('script, iframe, textarea, form, button, select, meta, style, link, title').remove();
+  $html.find('script, textarea, form, button, select, meta, style, link, title').remove();
 }
 
 /**
@@ -109,3 +109,4 @@ function finalizeHtml($html, needHtmlText) {
 }
 
 export default htmlSanitizer;
+

@@ -154,7 +154,7 @@ class Toolbar extends UIController {
       this._items.push(item);
     }
 
-    item.onCommandHandler = (e, commandName) => this._eventManager.emit('command', commandName);
+    item.onCommandHandler = (e, commandName, args) => this._eventManager.emit('command', commandName, args);
     item.onEventHandler = (e, eventName) => this._eventManager.emit(eventName);
     item.on('command', item.onCommandHandler);
     item.on('event', item.onEventHandler);

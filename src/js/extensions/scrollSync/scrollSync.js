@@ -31,13 +31,10 @@ function scrollSyncExtension(editor) {
   let isScrollable = false;
   let isActive = true;
   let button;
-  let $divider;
 
   // UI
   if (editor.getUI().name === 'default') {
     const toolbar = editor.getUI().getToolbar();
-
-    toolbar.addItem('divider');
     toolbar.addItem({
       type: 'button',
       options: {
@@ -48,7 +45,6 @@ function scrollSyncExtension(editor) {
       }
     });
     const items = toolbar.getItems();
-    $divider = items[items.length - 2].$el;
     button = items[items.length - 1];
 
     changeButtonVisiblityStateIfNeed();
@@ -86,16 +82,14 @@ function scrollSyncExtension(editor) {
   function changeButtonVisiblityStateIfNeed() {
     if (editor.mdPreviewStyle === 'vertical' && editor.currentMode === 'markdown') {
       button.$el.show();
-      $divider.show();
     } else {
       button.$el.hide();
-      $divider.hide();
     }
   }
 
   editor.on('previewRenderAfter', () => {
     sectionManager.sectionMatch();
-    if (isActive) {
+    if (isActive && !cm.isReadOnly()) {
       scrollManager.syncPreviewScrollTopToMarkdown();
     }
     isScrollable = true;
@@ -103,6 +97,10 @@ function scrollSyncExtension(editor) {
 
   editor.eventManager.listen('scroll', event => {
     if (!isActive) {
+      return;
+    }
+
+    if (editor.getCodeMirror().isReadOnly()) {
       return;
     }
 

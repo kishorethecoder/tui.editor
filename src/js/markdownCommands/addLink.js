@@ -36,12 +36,15 @@ const AddLink = CommandManager.command('markdown', /** @lends AddLink */{
       ch: range.to.ch
     };
 
-    let {linkText, url} = data;
+    let {linkText, url, openinNewWindow} = data;
     linkText = decodeURIGraceful(linkText);
     linkText = escapeMarkdownCharacters(linkText);
     url = encodeMarkdownCharacters(url);
 
-    const replaceText = `[${linkText}](${url})`;
+    let replaceText = `[${linkText}](${url})`;
+    if (openinNewWindow) {
+      replaceText += `{target="_blank"}`;
+    }
 
     doc.replaceRange(replaceText, from, to);
 

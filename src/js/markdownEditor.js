@@ -157,6 +157,9 @@ class MarkdownEditor extends CodeMirrorExt {
         quote: !!base.quote,
         list: !!base.list,
         task: !!base.taskList,
+        h2: base.header === 2,
+        h3: base.header === 3,
+        h4: base.header === 4,
         source: 'markdown'
       };
 

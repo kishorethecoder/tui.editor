@@ -23,6 +23,7 @@ class PopupCodeBlockLanguages extends LayerPopup {
     const popupButtonsHTML = [];
     const {languages} = options;
     languages.forEach(lang =>
+      // eslint-disable-next-line implicit-arrow-linebreak
       popupButtonsHTML.push(`<button type="button" class="${BUTTON_CLASS_PREFIX}${lang}" data-lang="${lang}">${lang}</button>`));
 
     options = util.extend({

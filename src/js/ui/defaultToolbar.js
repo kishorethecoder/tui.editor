@@ -2,7 +2,6 @@
  * @fileoverview implements DefaultToolbar
  * @author NHN FE Development Lab <dl_javascript@nhn.com>
  */
-import ResizeObserver from 'resize-observer-polyfill';
 
 import i18n from '../i18n';
 import Toolbar from './toolbar';
@@ -44,7 +43,7 @@ class DefaultToolbar extends Toolbar {
     super(eventManager, options);
 
     this._init(eventManager);
-    this._bindWidthChangedEvent();
+    // this._bindWidthChangedEvent();
   }
 
   /**
@@ -55,7 +54,7 @@ class DefaultToolbar extends Toolbar {
    */
   insertItem(index, item) {
     super.insertItem(index, item);
-    this._arrangeMoreButton();
+    // this._arrangeMoreButton();
   }
 
   _init(eventManager) {

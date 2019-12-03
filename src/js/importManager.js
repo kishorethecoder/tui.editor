@@ -181,9 +181,20 @@ class ImportManager {
    */
   _processClipboard(evData) {
     const cbData = evData.clipboardData || window.clipboardData;
-    const blobItems = cbData && cbData.items;
-    const {types} = cbData;
+    let blobItems = cbData && cbData.items;
+    let {types} = cbData;
 
+    if (util.inArray('Files', [].slice.call(types)) !== -1) {
+      blobItems = util.filter(blobItems, function(item) {
+        return item.kind === 'file';
+      });
+      blobItems = util.map(blobItems, function(item) {
+        return item;
+      });
+      types = util.filter(types, function(item) {
+        return item === 'Files';
+      });
+    }
     if (blobItems && types && types.length === 1 && util.inArray('Files', [].slice.call(types)) !== -1) {
       this._processBlobItems(blobItems, evData);
     }

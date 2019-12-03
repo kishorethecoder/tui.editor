@@ -81,7 +81,7 @@ class WwHeadingManager {
    * @private
    */
   _wrapDefaultBlockToHeadingInner() {
-    this.wwe.get$Body().find('h1, h2, h3, h4, h5, h6').each((index, node) => {
+    this.wwe.get$Body().find('h2, h3, h4').each((index, node) => {
       if ($(node).children('div, p').length <= 0) {
         $(node).wrapInner('<div />');
       }
@@ -176,7 +176,7 @@ class WwHeadingManager {
     const sq = this.wwe.getEditor();
     const $Body = this.wwe.get$Body();
     const isHeading = FIND_HEADING_RX.test(domUtils.getNodeName(startContainer));
-    const headingElement = isHeading ? startContainer : $(startContainer).parents('h1,h2,h3,h4,h5,h6')[0];
+    const headingElement = isHeading ? startContainer : $(startContainer).parents('h2,h3,h4')[0];
     let targetNode = prevTopNode;
     let offset = 1;
 
