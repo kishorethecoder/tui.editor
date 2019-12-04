@@ -22,24 +22,19 @@ const HR = CommandManager.command('wysiwyg', /** @lends HR */{
   exec(wwe) {
     const sq = wwe.getEditor();
     const range = sq.getSelection();
+    let currentNode, nextBlockNode, previousSibling;
 
     if (range.collapsed && !sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
-      const hr = document.createElement('hr');
-      const currentNode = domUtils.getChildNodeByOffset(range.startContainer, range.startOffset);
-      let nextBlockNode = domUtils.getTopNextNodeUnder(currentNode, wwe.get$Body()[0]);
-
-      // If nextBlockNode is div that has hr and has contenteditable as false,
-      // nextBlockNode should be set as nextSibling that is normal block.
-      if (nextBlockNode && !domUtils.isTextNode(nextBlockNode)) {
-        while (nextBlockNode && nextBlockNode.getAttribute('contenteditable') === 'false') {
-          nextBlockNode = nextBlockNode.nextSibling;
-        }
-      }
+      currentNode = domUtils.getChildNodeByOffset(range.startContainer, range.startOffset);
+      nextBlockNode = domUtils.getTopNextNodeUnder(currentNode, wwe.get$Body()[0]);
 
       if (!nextBlockNode) {
-        nextBlockNode = domUtils.createEmptyLine();
+        nextBlockNode = sq.createDefaultBlock();
         wwe.get$Body().append(nextBlockNode);
       }
+
+      const hr = sq.createElement('HR');
+      hr.setAttribute('contenteditable', false);
 
       sq.modifyBlocks(frag => {
         frag.appendChild(hr);
@@ -47,7 +42,7 @@ const HR = CommandManager.command('wysiwyg', /** @lends HR */{
         return frag;
       });
 
-      const {previousSibling} = hr;
+      ({previousSibling} = hr);
       if (previousSibling
                 && domUtils.isTextNode(previousSibling)
                 && domUtils.getTextLength(previousSibling) === 0
@@ -55,13 +50,10 @@ const HR = CommandManager.command('wysiwyg', /** @lends HR */{
         hr.parentNode.removeChild(previousSibling);
       }
 
-      hr.parentNode.replaceChild(domUtils.createHorizontalRule(), hr);
-
       range.selectNodeContents(nextBlockNode);
       range.collapse(true);
 
       sq.setSelection(range);
-      sq.saveUndoState(range);
     }
 
     wwe.focus();
