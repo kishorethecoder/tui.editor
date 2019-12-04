@@ -273,7 +273,7 @@ describe('Editor', () => {
       editor.setValue(xss);
 
       const content = editor.getHtml();
-      expect(content).toBe('<script data-tomark-pass="">alert("xss");</script>');
+      expect(content).toBe(xss);
     });
   });
 
