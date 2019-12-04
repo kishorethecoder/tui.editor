@@ -71,20 +71,16 @@ class WwPasteContentHelper {
       const isTextNode = node.nodeType === 3;
       /* eslint-disable max-len */
       const isInlineNode = /^(SPAN|A|CODE|EM|I|STRONG|B|S|U|ABBR|ACRONYM|CITE|DFN|KBD|SAMP|VAR|BDO|Q|SUB|SUP)$/ig.test(node.tagName);
-      const isBR = node.nodeName === 'BR';
       /* eslint-enable max-len */
 
-      if (isTextNode || isInlineNode || isBR) {
+      if (isTextNode || isInlineNode) {
         if (!currentDiv) {
           currentDiv = document.createElement('div');
           $tempContainer.append(currentDiv);
+          // newFrag.appendChild(currentDiv);
         }
 
         currentDiv.appendChild(node);
-
-        if (isBR) {
-          currentDiv = null;
-        }
       } else {
         if (currentDiv && currentDiv.lastChild.tagName !== 'BR') {
           currentDiv.appendChild($('<br/>')[0]);
@@ -92,6 +88,7 @@ class WwPasteContentHelper {
 
         currentDiv = null;
         $tempContainer.append(node);
+        // newFrag.appendChild(node);
       }
     });
 
@@ -199,10 +196,6 @@ class WwPasteContentHelper {
                 && (isInListItem || isInBlockquote || !hasBlockChildElement)
       ) {
         return;
-      }
-
-      if (blockElement.lastChild && blockElement.lastChild.nodeName !== 'BR') {
-        $blockElement.append(document.createElement('br'));
       }
 
       $blockElement.replaceWith($blockElement.html());
