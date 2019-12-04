@@ -113,7 +113,6 @@ class CodeMirrorExt {
     if (cursorToEnd) {
       this.moveCursorToEnd();
     }
-    this.cm.doc.clearHistory();
     this.cm.refresh();
   }
 
