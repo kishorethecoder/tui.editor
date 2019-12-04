@@ -93,7 +93,7 @@ describe('Bold', () => {
 
     wwe.setValue('<i>line</i>');
 
-    range.selectNodeContents(wwe.get$Body().children()[0].firstChild);
+    range.selectNodeContents(wwe.get$Body().children()[0]);
     wwe.getEditor().setSelection(range);
 
     Bold.exec(wwe);

@@ -4,7 +4,6 @@
  */
 
 import CommandManager from '../commandManager';
-import domUtils from '../domUtils';
 
 /**
  * Strike
@@ -34,7 +33,6 @@ const Strike = CommandManager.command('wysiwyg', /** @lends Strike */{
       sq.setSelection(range);
     } else {
       styleStrike(sq);
-      domUtils.optimizeRange(sq.getSelection(), 'S');
     }
   }
 });
