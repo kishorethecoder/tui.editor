@@ -190,15 +190,10 @@ class WwTableManager {
           } else if (this._isEmptyFirstLevelLI(range)) {
             this.wwe.defer(() => {
               // Squire make div when LI level is decreased in first level so should replace div to br
-              const afterRange = this.wwe.getRange().cloneRange();
+              const afterRange = this.wwe.getRange();
               const div = afterRange.startContainer;
-              const br = document.createElement('br');
 
-              div.parentNode.replaceChild(br, div);
-
-              afterRange.setStartBefore(br);
-              afterRange.collapse(true);
-              this.wwe.getEditor().setSelection(afterRange);
+              div.parentNode.replaceChild(document.createElement('br'), div);
             });
           }
           this._appendBrIfTdOrThNotHaveAsLastChild(range);
@@ -430,13 +425,13 @@ class WwTableManager {
    * @private
    */
   _moveListItemToPreviousOfList(liNode, range) {
-    const {parentNode: listNode, firstChild} = liNode;
+    const {parentNode: listNode} = liNode;
     const fragment = document.createDocumentFragment();
 
     domUtils.mergeNode(liNode, fragment);
     listNode.parentNode.insertBefore(fragment, listNode);
 
-    range.setStart(firstChild, 0);
+    range.setStart(listNode.previousSibling, 0);
     range.collapse(true);
     this.wwe.getEditor().setSelection(range);
 
