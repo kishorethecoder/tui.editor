@@ -282,11 +282,8 @@ class WwTableManager {
     }
 
     const brNode = styleNode.querySelector('br');
-    if (!brNode) {
-      return;
-    }
-
     const {parentNode: tdNode, nodeName} = styleNode;
+
     if (nodeName === 'CODE' && !brNode.previousSibling) {
       // cursor is located in the start of text
       // Before Enter : <code>|TEST</code>
