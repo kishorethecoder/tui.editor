@@ -1,7 +1,7 @@
 import editor from '../../editorFixture';
 
 fixture`markdown toolbar strike`
-  .page`http://localhost:8080/examples/example-e2e.html`;
+  .page`http://localhost:8080/examples/example13-all-extension-blank.html`;
 
 test('click strike button then type text', async t => {
   await t
