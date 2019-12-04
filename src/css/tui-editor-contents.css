@@ -183,8 +183,7 @@
     margin-bottom: 0 !important;
 }
 
-.tui-editor-contents ul li,
-.tui-editor-contents ol li {
+.tui-editor-contents ul li {
     position: relative;
 }
 
@@ -193,7 +192,6 @@
 }
 
 .tui-editor-contents ul li.task-list-item:before,
-.tui-editor-contents ol li.task-list-item:before,
 .tui-editor-contents pre ul li:before {
     content: "";
 }
