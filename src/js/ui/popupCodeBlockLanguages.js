@@ -22,9 +22,8 @@ class PopupCodeBlockLanguages extends LayerPopup {
   constructor(options) {
     const popupButtonsHTML = [];
     const {languages} = options;
-    languages.forEach(lang => (
-      popupButtonsHTML.push(`<button type="button" class="${BUTTON_CLASS_PREFIX}${lang}" data-lang="${lang}">${lang}</button>`)
-    ));
+    languages.forEach(lang =>
+      popupButtonsHTML.push(`<button type="button" class="${BUTTON_CLASS_PREFIX}${lang}" data-lang="${lang}">${lang}</button>`));
 
     options = util.extend({
       header: false,

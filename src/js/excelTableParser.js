@@ -19,13 +19,13 @@ function excelTableParser(content) {
   rows.forEach(row => {
     const cols = row.split('\t');
 
-    if (cols) {
-      if (!colLength) {
-        colLength = cols.length;
-      }
-
-      data = data.concat(cols);
+    if (!cols) {
+      return;
+    } else if (!colLength) {
+      colLength = cols.length;
     }
+
+    data = data.concat(cols);
   });
 
   return {

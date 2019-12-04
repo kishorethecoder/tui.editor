@@ -554,17 +554,16 @@ class WysiwygEditor {
   _isStartHeadingOrTableAndContainsThem(range) {
     const {startContainer, startOffset, commonAncestorContainer, collapsed} = range;
     const root = this.getEditor().getRoot();
-    let result = false;
 
     if (!collapsed && commonAncestorContainer === root) {
       if (startContainer === root) {
-        result = FIND_TABLE_AND_HEADING_RX.test(domUtils.getChildNodeByOffset(startContainer, startOffset).nodeName);
+        return FIND_TABLE_AND_HEADING_RX.test(domUtils.getChildNodeByOffset(startContainer, startOffset).nodeName);
       } else if (startOffset === 0) {
-        result = FIND_TABLE_AND_HEADING_RX.test(domUtils.getParentUntil(startContainer, root).nodeName);
+        return FIND_TABLE_AND_HEADING_RX.test(domUtils.getParentUntil(startContainer, root).nodeName);
       }
     }
 
-    return result;
+    return false;
   }
 
   _wrapDefaultBlockToOrphanTexts() {
