@@ -215,11 +215,9 @@ class WwTablePasteHelper {
   }
 
   _isPossibleInsertToTable(node) {
-    const {nodeName} = node;
-    const isChildlessCode = nodeName === 'CODE' && node.childNodes.length > 1;
-    const isList = nodeName === 'UL' || nodeName === 'OL';
+    const isChildlessCode = node.nodeName === 'CODE' && node.childNodes.length > 1;
 
-    return !isChildlessCode && (isList || domUtils.isMDSupportInlineNode(node) || domUtils.isTextNode(node));
+    return !isChildlessCode && (domUtils.isMDSupportInlineNode(node) || domUtils.isTextNode(node));
   }
 
   /**
