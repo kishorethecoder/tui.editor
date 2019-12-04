@@ -105,8 +105,7 @@ class Convertor {
    * @returns {string} html text
    */
   _markdownToHtml(markdown, env) {
-    // should insert data-tomark-pass in the opening tag
-    markdown = markdown.replace(/<(?!\/)([^>]+)([/]?)>/g, '<$1 data-tomark-pass $2>');
+    markdown = markdown.replace(/<([^>]+)([/]?)>/g, '<$1 data-tomark-pass $2>');
     // eslint-disable-next-line
         const onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
     while (onerrorStripeRegex.exec(markdown)) {
