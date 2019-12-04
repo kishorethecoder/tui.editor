@@ -23,10 +23,10 @@ class PopupAddLink extends LayerPopup {
    */
   constructor(options) {
     const POPUP_CONTENT = `
-            <label for="url">${i18n.get('URL')}</label>
-            <input type="text" class="te-url-input" />
             <label for="linkText">${i18n.get('Link text')}</label>
             <input type="text" class="te-link-text-input" />
+            <label for="url">${i18n.get('URL')}</label>
+            <input type="text" class="te-url-input" />
             <div class="te-button-section">
                 <button type="button" class="te-ok-button">${i18n.get('OK')}</button>
                 <button type="button" class="te-close-button">${i18n.get('Cancel')}</button>
@@ -93,7 +93,12 @@ class PopupAddLink extends LayerPopup {
         inputURL.value = selectedText;
       }
 
-      inputURL.focus();
+      if (selectedText.length > 0 && inputURL.value.length < 1) {
+        inputURL.focus();
+      } else {
+        inputText.focus();
+        inputText.setSelectionRange(0, selectedText.length);
+      }
     });
 
     this.on('hidden', () => {
