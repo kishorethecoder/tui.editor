@@ -34,7 +34,6 @@ const HR = CommandManager.command('wysiwyg', /** @lends HR */{
       }
 
       const hr = sq.createElement('HR');
-      hr.setAttribute('contenteditable', false);
 
       sq.modifyBlocks(frag => {
         frag.appendChild(hr);
